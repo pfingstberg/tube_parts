@@ -10,6 +10,6 @@ git commit -m "first commit"</br>
 git remote add origin https://github.com/pfingstberg/tubeparts.git</br>
 git push -u origin master</br>
 </br>
-<p>…or push an existing repository from the command line</p>
-<p>git remote add origin https://github.com/pfingstberg/tubeparts.git</p>
-<p>git push -u origin master
+…or push an existing repository from the command line</br>
+git remote add origin https://github.com/pfingstberg/tubeparts.git</br>
+git push -u origin master</br>
