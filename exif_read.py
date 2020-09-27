@@ -60,7 +60,7 @@ for filnm in lj:
     if i>ibreak:
         break
 
-al1 = allfiles(pth) # wszystkie pliki w ścieżce pth
+al1 = allfiles(pth) # wszystkie pliki w ścieżce pth (1)
     #%%
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
