@@ -28,8 +28,9 @@ for k, v in GPSTAGS.items():
     #print(k if k==51041 else "",end='')
 #%%
 import os, hashlib
-pth = r'\\KABATY\Users\Public\Pictures\card_dcim_camera'
-ld = os.listdir(pth)
+#ptht = r'\\KABATY\Users\Public\Pictures\card_dcim_camera'
+ptht = r'c:\Users\Public\Pictures\card_dcim_camera'
+ld = os.listdir(ptht)
 lj = [ld[i] for i in range(len(ld)) if     ld[i].endswith('.jpg')] # lista jpeg-ów
 lm = [ld[i] for i in range(len(ld)) if not ld[i].endswith('.jpg')] # ~lista mpeg=ów 
 print(len(ld),len(lj),len(lm))
@@ -51,21 +52,43 @@ def allfiles(inppath):
             filelist.append(os.path.join(root,file))
     return filelist
 
-i = 1; ibreak=1
-for filnm in lj:
-    inpfile = pth+'\\'+filnm
-    inpfsiz = os.stat(inpfile).st_size
-    print(str(i).rjust(3), filnm.ljust(20), hshmd5(inpfile), inpfsiz)
-    i+=1
+rdic = dict() # na dane o plikach (zdjęciach) z 'recordings'
+tdic = dict() # na dane o plikach (zdjęciach) z 'telefonu'
+
+pthr = r'r:\recordings'
+alr = allfiles(pthr) # wszystkie pliki w ścieżce pthr (recordings)
+alt = allfiles(ptht) # wszystkie pliki w ścieżce ptht (z telefonu)
+
+i = 1; ibreak=2
+for f in alr:
+    filn = f.split('\\')[-1]
+    fsiz = os.stat(f).st_size
+    fhsh = hshmd5(f)
+    rdic[f] = filn, fsiz, fhsh
+    print(str(i).rjust(5), filn.ljust(30), fhsh, fsiz)
+    i += 1
     if i>ibreak:
         break
 
-al1 = allfiles(pth) # wszystkie pliki w ścieżce pth (1)
+i = 1; ibreak=2
+for filn in lj: #   pętla po zdjęciach 'z telefonu'
+    f = ptht+'\\'+filn
+    fsiz = os.stat(f).st_size
+    fhsh = hshmd5(f)
+    tdic[f] = filn, fsiz, fhsh
+    print(str(i).rjust(5), filn.ljust(30), fhsh, fsiz)
+    i+=1
+    if i>ibreak:
+        break
+#%%
+rdic = dict()
+tdic = dict()
+
     #%%
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 filnam = lj[0]
-filnam = pth+"\\"+filnam
+filnam = ptht+"\\"+filnam
 with Image.open(filnam) as im:
     print('{} {}x{}'.format(im.format, im.size[0], im.size[1]))
     exifd = im._getexif()
