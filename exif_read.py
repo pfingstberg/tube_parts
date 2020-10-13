@@ -19,14 +19,16 @@ DateTimeOriginal = exifd[TAGSr['DateTimeOriginal']]
 print(DateTimeOriginal)
 
 fp.close()
-#%%
+#%% wypisanie wszystkich wartoći tagów przykładowego obrazka
 for ek, ev in exifd.items():
     if ek != TAGSr['MakerNote']:
         print(ek,TAGS.get(ek,ek),ev)
-#%%
+#%% wypisanie jak rozwijają się kody tagów i gpstagów na ich nazwy
 for k, v in GPSTAGS.items():
     print(k,v) 
     #print(k if k==51041 else "",end='')
+for k, v in TAGS.items():
+    print(k,v) 
 #%%
 import os, hashlib
 #ptht = r'\\KABATY\Users\Public\Pictures\card_dcim_camera'
@@ -61,7 +63,7 @@ alr = allfiles(pthr) # wszystkie pliki w ścieżce pthr (recordings)
 alt = allfiles(ptht) # wszystkie pliki w ścieżce ptht (z telefonu)
 
 i = 1; ibreak=2
-for f in alr:
+for f in alr: # pętla przez wszystkie zdjęcia w 'r' i policzenie hashów
     filn = f.split('\\')[-1]
     fsiz = os.stat(f).st_size
     fhsh = hshmd5(f)
@@ -73,7 +75,7 @@ for f in alr:
         #break
 
 i = 1; ibreak=2
-for filn in lj: #   pętla po zdjęciach 'z telefonu'
+for filn in lj: #   pętla po zdjęciach 'z telefonu' i policzenie hashów
     f = ptht+'\\'+filn
     fsiz = os.stat(f).st_size
     fhsh = hshmd5(f)
@@ -83,7 +85,7 @@ for filn in lj: #   pętla po zdjęciach 'z telefonu'
     if i>ibreak:
         pass
         #break
-#%%
+#%% przejcie przez zdjęcia z telefonu i wydrukowanie które z 'r' ta sama nazwa albo hash 
 for k,v in tdic.items():
     tfiln = k.split('\\')[-1]
     tfsiz = v[1]
