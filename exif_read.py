@@ -1,27 +1,28 @@
 # -*- coding: utf-8 -*-
 
-from PIL import Image
+from PIL import Image, PILLOW_VERSION as pvsn
+from PIL.ExifTags import TAGS, GPSTAGS
+print(pvsn) # wydrukowanie używanej wersji Pillow
+TAGSr = dict(((v, k) for k, v in TAGS.items())) # TAGSr czyli TAGS odwrotnie, nazwa:liczba
 
 fp = open("test_image_8.jpg", "rb")
+
 im = Image.open(fp)
-
 print(im.format, "%dx%d" % im.size, im.mode)
-
-#------------------------------------------------------------------------------
-from PIL.ExifTags import TAGS, GPSTAGS
-#from PIL.ExifTags import GPSTAGS
-
-#print(PIL.VERSION, PIL.PILLOW_VERSION)
 exifd = im._getexif()
-print(exifd[36867])
-
-keys = list(exifd.keys())
-TAGSr = dict(((v, k) for k, v in TAGS.items())) # TAGSr czyli TAGS odwrotnie, nazwa:liczba
+#keys = list(exifd.keys()) # wszystkie kody tagów obecnych w obrazku
+ImageLength      = exifd[TAGSr['ImageLength']]
+ImageWidth       = exifd[TAGSr['ImageWidth']]
+Make             = exifd[TAGSr['Make']]
+Model            = exifd[TAGSr['Model']]
+DateTimeOriginal = exifd[TAGSr['DateTimeOriginal']]
+print(DateTimeOriginal)
 
 fp.close()
 #%%
 for ek, ev in exifd.items():
-    print(ek,TAGS.get(ek,ek),ev)
+    if ek != TAGSr['MakerNote']:
+        print(ek,TAGS.get(ek,ek),ev)
 #%%
 for k, v in GPSTAGS.items():
     print(k,v) 
@@ -68,7 +69,8 @@ for f in alr:
     print(str(i).rjust(5), filn.ljust(30), fhsh, fsiz)
     i += 1
     if i>ibreak:
-        break
+        pass
+        #break
 
 i = 1; ibreak=2
 for filn in lj: #   pętla po zdjęciach 'z telefonu'
@@ -79,12 +81,24 @@ for filn in lj: #   pętla po zdjęciach 'z telefonu'
     print(str(i).rjust(5), filn.ljust(30), fhsh, fsiz)
     i+=1
     if i>ibreak:
-        break
+        pass
+        #break
 #%%
-rdic = dict()
-tdic = dict()
+for k,v in tdic.items():
+    tfiln = k.split('\\')[-1]
+    tfsiz = v[1]
+    tfhsh = v[2]
+    #print(filn,v[1],v[2])
+    for rk,rv in rdic.items():
+        rfiln = rk.split('\\')[-1]
+        rfsiz = rv[1]
+        rfhsh = rv[2]
+        if rfiln == tfiln:
+            print(tfiln,tfsiz,rk)
+        if rfhsh == tfhsh:
+            print(tfiln, rk,"\n")
 
-    #%%
+#%%
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 filnam = lj[0]
